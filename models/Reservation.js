@@ -18,6 +18,10 @@ const ReservationSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  sort: {
+    type: Number,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("reservation", ReservationSchema);

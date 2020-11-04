@@ -20,24 +20,24 @@ router.get("/", auth, async (req, res) => {
 // @desc    Add   cart
 // @access  Private
 router.post("/", auth, async (req, res) => {
-  const { product } = req.body;
-  const { id } = req.user;
+  const { sku, price, name } = req.body;
+  const quantity = 1;
   try {
-    let cart = await Cart.findOne({ user: id });
+    let cart = await Cart.findOne({ sku: sku });
 
     if (cart) {
-      return res.status(400).json({ msg: "Cart already exists" });
+      return res.status(400).json({ msg: "Product already in cart" });
     } else {
-      const products = [];
-      products.push(product);
-
       const newCart = new Cart({
-        products,
-        user: id,
+        sku,
+        price,
+        name,
+        quantity,
+        user: req.user.id,
       });
 
       cart = await newCart.save();
-      console.log(`New cart created and ${product.name} added to cart`.magenta);
+      console.log(`${name} added to cart`.magenta);
     }
 
     res.json(cart);
@@ -47,12 +47,10 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// @route   PUT  api/cart/:id/addproduct
-// @desc    Add product to cart
+// @route   PUT  api/cart/:id/plusone
+// @desc    Add one to quantity of product
 // @access  Private
-router.put("/:id/addproduct", auth, async (req, res) => {
-  const { product } = req.body;
-
+router.put("/:id/plusone", auth, async (req, res) => {
   try {
     let cart = await Cart.findById(req.params.id);
     if (!cart) return res.status(404).json({ msg: "Cart not found" });
@@ -61,11 +59,12 @@ router.put("/:id/addproduct", auth, async (req, res) => {
     if (cart.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: "Not authorized" });
     }
-    cart.products.push(product);
+    cart.quantity++;
 
     await Cart.findByIdAndUpdate(req.params.id, { $set: cart }, { new: true });
 
-    console.log(`Product ${product.name} added to cart`.magenta);
+    console.log(`Product ${cart.name} quantity increased by one`.magenta);
+    cart = await Cart.find({ user: req.user.id });
     res.json(cart);
   } catch (err) {
     console.error(`${err.message}`.red.bold);
@@ -73,13 +72,10 @@ router.put("/:id/addproduct", auth, async (req, res) => {
   }
 });
 
-// @route   PUT  api/cart/:id
-// @desc    Edit quantity of product in cart
+// @route   PUT  api/cart/:id/minus one
+// @desc    Minus one to quantity of product
 // @access  Private
-router.put("/:id/editproduct", auth, async (req, res) => {
-  const { product } = req.body;
-  const { sku } = product;
-
+router.put("/:id/minusone", auth, async (req, res) => {
   try {
     let cart = await Cart.findById(req.params.id);
     if (!cart) return res.status(404).json({ msg: "Cart not found" });
@@ -88,40 +84,13 @@ router.put("/:id/editproduct", auth, async (req, res) => {
     if (cart.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: "Not authorized" });
     }
-    // Remove product from cart
-    cart.products = cart.products.filter((product) => product.sku !== sku);
-    // Re-add product to cart, but now with new quantity
-    cart.products.push(product);
+    cart.quantity--;
 
     await Cart.findByIdAndUpdate(req.params.id, { $set: cart }, { new: true });
 
-    res.json(cart);
-  } catch (err) {
-    console.error(`${err.message}`.red.bold);
-    res.status(500).send("Server Error");
-  }
-});
+    console.log(`Product ${cart.name} quantity decreased by one`.magenta);
 
-// @route   PUT  api/cart/:id
-// @desc    Remove product from cart
-// @access  Private
-router.put("/:id/removeproduct", auth, async (req, res) => {
-  const { product } = req.body;
-  const { sku } = product;
-
-  try {
-    let cart = await Cart.findById(req.params.id);
-    if (!cart) return res.status(404).json({ msg: "Cart not found" });
-
-    // Make sure user owns cart
-    if (cart.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: "Not authorized" });
-    }
-    // Remove product from cart
-    cart.products = cart.products.filter((product) => product.sku !== sku);
-
-    await Cart.findByIdAndUpdate(req.params.id, { $set: cart }, { new: true });
-
+    cart = await Cart.find({ user: req.user.id });
     res.json(cart);
   } catch (err) {
     console.error(`${err.message}`.red.bold);
@@ -130,7 +99,7 @@ router.put("/:id/removeproduct", auth, async (req, res) => {
 });
 
 // @route   DELETE  api/cart/:id
-// @desc    Delete product from cart
+// @desc    Remove product from cart
 // @access  Private
 router.delete("/:id", auth, async (req, res) => {
   try {
@@ -143,9 +112,9 @@ router.delete("/:id", auth, async (req, res) => {
       return res.status(401).json({ msg: "Not authorized" });
     }
 
-    // Delete cart
+    // Remove product from cart
     await Cart.findByIdAndRemove(req.params.id);
-    res.json({ msg: "Cart removed" });
+    res.json({ msg: "Product removed" });
   } catch (err) {
     console.error(`${err.message}`.red.bold);
     res.status(500).send("Server Error");

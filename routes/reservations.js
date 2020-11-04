@@ -9,7 +9,7 @@ const Reservation = require("../models/Reservation");
 router.get("/", auth, async (req, res) => {
   try {
     const reservations = await Reservation.find({ user: req.user.id }).sort({
-      date: -1,
+      sort: 1,
     });
     res.json(reservations);
   } catch (err) {
@@ -22,9 +22,9 @@ router.get("/", auth, async (req, res) => {
 // @desc    Add reservations
 // @access  Private
 router.post("/", auth, async (req, res) => {
-  const { location, weekday, time } = req.body;
+  const { location, weekday, time, sort } = req.body;
   try {
-    let reservation = await Reservation.findOne({ weekday });
+    let reservation = await Reservation.findOne({ user: req.user.id, weekday });
     if (reservation) {
       return res
         .status(400)
@@ -35,6 +35,7 @@ router.post("/", auth, async (req, res) => {
       location,
       weekday,
       time,
+      sort,
       user: req.user.id,
     });
 
