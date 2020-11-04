@@ -27,6 +27,13 @@ export const MINUS_ONE = "MINUS_ONE";
 export const CART_ERROR = "CART_ERROR";
 export const OPEN_CART = "OPEN_CART";
 export const CLOSE_CART = "CLOSE_CART";
+// BLOGS
+export const GET_BLOGS = "GET_BLOGS";
+export const ADD_BLOG = "ADD_BLOG";
+export const EDIT_BLOG = "EDIT_BLOG";
+export const VIEW_BLOG = "VIEW_BLOG";
+export const DELETE_BLOG = "DELETE_BLOG";
+export const BLOG_ERROR = "BLOG_ERROR";
 // ALERTS
 export const SET_ALERT = "SET_ALERT";
 export const REMOVE_ALERT = "REMOVE_ALERT";
@@ -41,3 +48,7 @@ export const LOGOUT = "LOGOUT";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const ROUTE_SHOP = "ROUTE_SHOP";
 export const CLEAR_ROUTE = "CLEAR_ROUTE";
+// ADMIN
+export const ADMIN_LOADED = "ADMIN_LOADED";
+// EMPLOYEES
+export const SET_DASHBOARD = "SET_DASHBOARD";

@@ -63,7 +63,7 @@ const CartState = (props) => {
   };
 
   // Plus one
-  const plusOne = async (_id) => {
+  const plusOne = async (product) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -71,9 +71,9 @@ const CartState = (props) => {
     };
     try {
       setLoading();
-      const res = await axios.put(`/api/cart/${_id}/plusone`, config);
-
-      dispatch({ type: PLUS_ONE, payload: res.data });
+      await axios.put(`/api/cart/${product._id}/plusone`, config);
+      product.quantity++;
+      dispatch({ type: PLUS_ONE, payload: product });
     } catch (err) {
       dispatch({
         type: CART_ERROR,
@@ -83,7 +83,7 @@ const CartState = (props) => {
   };
 
   // Minus one
-  const minusOne = async (_id) => {
+  const minusOne = async (product) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -91,9 +91,9 @@ const CartState = (props) => {
     };
     try {
       setLoading();
-      const res = await axios.put(`/api/cart/${_id}/minusone`, config);
-
-      dispatch({ type: MINUS_ONE, payload: res.data });
+      await axios.put(`/api/cart/${product._id}/minusone`, config);
+      product.quantity--;
+      dispatch({ type: MINUS_ONE, payload: product });
     } catch (err) {
       dispatch({
         type: CART_ERROR,
@@ -101,14 +101,15 @@ const CartState = (props) => {
       });
     }
   };
-  // Delete cart
-  const deleteCart = async (_id) => {
+
+  // Delete item from cart
+  const deleteCart = async (product) => {
     try {
       setLoading();
-      await axios.delete(`/api/cart/${_id}`);
+      await axios.delete(`/api/cart/${product._id}`);
       dispatch({
         type: DELETE_CART,
-        payload: _id,
+        payload: product._id,
       });
     } catch (err) {
       dispatch({
@@ -117,10 +118,6 @@ const CartState = (props) => {
       });
     }
   };
-
-  // Update cart
-
-  // Cart error
 
   // Open Cart
   const openCart = async () => {

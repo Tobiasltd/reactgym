@@ -68,10 +68,10 @@ const Home = () => {
         </p>
       </div>
       <div className="bg-white">
-        <h1 className="x-large letter-spacing-none bold ml-2 mt-2">
+        <h1 className="xx-large letter-spacing-none bold ml-2 mt-2">
           TAKE CHARGE
         </h1>
-        <h1 className="x-large letter-spacing-none bold ml-2">
+        <h1 className="xx-large letter-spacing-none bold ml-2">
           STOP MAKING EXCUSES
         </h1>
 

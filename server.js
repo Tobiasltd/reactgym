@@ -13,7 +13,7 @@ app.get("/", (req, res) => res.json({ msg: "Welcome to the react gym api" }));
 
 // Define Routes
 app.use("/api/users", require("./routes/users"));
-app.use("/api/authAdmin", require("./routes/authAdmin"));
+app.use("/api/authadmins", require("./routes/authadmins"));
 app.use("/api/admins", require("./routes/admins"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/blogs", require("./routes/blogs"));

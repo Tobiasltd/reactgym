@@ -8,7 +8,7 @@ const { check, validationResult } = require("express-validator");
 
 const Admin = require("../models/Admin");
 
-// @route   GET  api/authAdmins
+// @route   GET  api/authadmins
 // @desc    Get logged in admin
 // @access  Private
 router.get("/", admin, async (req, res) => {
@@ -22,7 +22,7 @@ router.get("/", admin, async (req, res) => {
   }
 });
 
-// @route   POST  api/authAdmins
+// @route   POST  api/authadmins
 // @desc    Auth admin & get token
 // @access  Public
 router.post(

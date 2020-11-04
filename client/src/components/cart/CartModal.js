@@ -25,9 +25,7 @@ const CartModal = () => {
               <h4>Shopping Cart</h4>
             </div>
             <div className="modal-body">
-              {loading ? (
-                <Spinner />
-              ) : cart && cart !== [] && !loading ? (
+              {cart && cart !== [] ? (
                 cart.map((product) => (
                   <CartItem key={product._id} product={product} />
                 ))

@@ -27,13 +27,17 @@ const cartReducer = (state, action) => {
     case PLUS_ONE:
       return {
         ...state,
-        cart: action.payload,
+        cart: state.cart.map((product) =>
+          product._id === action.payload._id ? action.payload : product
+        ),
         loading: false,
       };
     case MINUS_ONE:
       return {
         ...state,
-        cart: action.payload,
+        cart: state.cart.map((product) =>
+          product._id === action.payload._id ? action.payload : product
+        ),
         loading: false,
       };
     case DELETE_CART:

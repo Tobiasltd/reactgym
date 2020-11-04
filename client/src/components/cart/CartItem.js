@@ -6,18 +6,18 @@ const CartItem = ({ product, plusIcon, minusIcon, trashIcon }) => {
   const cartContext = useContext(CartContext);
   const { plusOne, minusOne, deleteCart } = cartContext;
 
-  const { name, price, quantity, _id } = product;
+  const { name, price, quantity } = product;
 
   const plus = () => {
-    plusOne(_id);
+    plusOne(product);
   };
 
   const minus = () => {
-    minusOne(_id);
+    minusOne(product);
   };
 
   const trash = () => {
-    deleteCart(_id);
+    deleteCart(product);
   };
 
   return (
