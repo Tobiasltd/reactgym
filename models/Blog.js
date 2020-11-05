@@ -22,6 +22,18 @@ const BlogSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  text2: {
+    type: String,
+    required: true,
+  },
+  text3: {
+    type: String,
+    required: true,
+  },
+  subtitle: {
+    type: String,
+    required: true,
+  },
   imgheader: {
     type: String,
     required: true,
